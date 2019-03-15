@@ -7,3 +7,4 @@ Git study good.
 Creating a new branch is quick AND simple.
 Test branch with ff.
 Test pull AND push.
+添加码云和github两个远程仓库，棒棒哒。
