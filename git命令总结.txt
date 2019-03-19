@@ -1,0 +1,254 @@
+安装git
+
+$ git config --global user.name "Your Name"
+$ git config --global user.email "email@example.com"
+
+
+$ mkdir learngit
+$ cd learngit
+$ pwd
+/Users/michael/learngit
+
+
+初始化创建仓库
+$ git init  
+
+查看git目录
+ls -ah
+
+添加到暂存区
+git add <file-name>
+
+提交到版本库   -m 添加日志
+git commit -m "自由填写日志"
+
+查看文件是否修改过
+git status  //命令可以让我们时刻掌握仓库当前的状态
+
+查看做了什么修改用
+git diff
+
+查看日志
+git log 
+
+日志成一行
+git log --pretty=oneline
+
+HEAD当前版本  切换版本用
+git reset --hard <commit_id>
+
+记录你的每一次命令
+git reflog
+
+
+工作区和暂存区（stage）
+
+可以把暂存区的修改撤销掉（unstage）
+git reset HEAD <file>
+
+想直接丢弃工作区的修改时
+git checkout --修改的文件
+
+删除文件
+rm test.txt
+git rm test.txt
+git checkout --
+
+
+
+添加远程仓库
+
+创建SSH KEY
+查看主目录下有无.ssh目录     $cd ~/.ssh       // id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人
+ssh-keygen -t rsa -C "youremail@example.com"
+点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容
+
+//关联远程仓库
+
+第一种
+git remote add origin https://github.com/gyjlwn/repository.git
+第二种（推荐）
+git remote add origin  git@githup.com:gyjlwn/gyjweb.git 
+
+//就可以把本地库的所有内容推送到远程库上(第一次)
+git push -u origin master
+
+//以后就可以去掉-u(-u表示全部) 推动本地修改的内容
+git push origin master
+
+
+从远程仓库克隆
+
+git clone https://github.com/gyjlwn/gyjweb.git     //这个每次都需要输入命令
+用ssh
+git clone git@githup.com:gyjlwn/gyjweb.git   //这个原生速度最快
+
+
+分支管理
+
+//创建并和并分支
+git checkout -b <branch-name>    // -b 表示创建并切换
+
+//创建分支
+git branch <branch-name>  
+
+//切换分支
+git checkout <branch-name>  
+
+//查看分支
+git branch
+
+//合并分支到当前分支
+git merge dev
+
+//删除分支 (-d删除   -D强制删除)
+git branch -d dev   
+
+//解决冲突的方式
+日志查询方式：
+git log 命令支持的选项
+
+-p 按补丁格式显示每个更新之间的差异。
+
+--stat 显示每次更新的文件修改统计信息。
+
+--shortstat 只显示 --stat 中最后的行数修改添加移除统计。
+
+--name-only 仅在提交信息后显示已修改的文件清单。
+
+--name-status 显示新增、修改、删除的文件清单。
+
+--abbrev-commit 仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。
+
+--relative-date 使用较短的相对时间显示（比如，“2 weeks ago”）。
+
+--graph 显示 ASCII 图形表示的分支合并历史。
+
+--pretty 使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和 format（后跟指定格式）。
+
+
+分支管理策略
+合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并。
+//使用Fast forward模式
+git merge dev
+
+//不使用Fast forward模式（--no-ff）
+git merge --no-ff -m "merge with no-ff" dev
+
+查看日志
+git log --graph --pretty=oneline --abbrev-commit
+
+
+
+BUG分支
+//隐藏正在工作的分支
+git stash
+
+//查看隐藏的分支内容
+git stash list
+
+//恢复隐藏的内容
+git stash pop  // 恢复的同时把stash内容也删了
+git stash apply  //用git stash apply恢复，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
+
+//恢复指定的stash
+git stash apply stash@{0}
+
+//强制删除分支
+git branch -D <name>
+
+
+
+//查看远程库的信
+git remote -v
+
+//推送分支，把本地分支提交到远程库
+git push origin master
+git push origin dev
+
+//推送失败后抓取远程新的提交
+git pull 
+
+//创建和远程分支对应的分支
+git checkout -b branch-name origin/branch-name，
+git checkout -b dev origin/dev
+
+//建立本地分支和远程分支的关联
+git branch --set-upstream branch-name origin/branch-name
+
+远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
+git pull
+
+//rebase 操作
+git rebase //rebase操作可以把本地未push的分叉提交历史整理成直线；
+           //rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。
+           
+标签管理
+//创建标签
+git tag v1.0
+
+//查看标签列表
+git tag
+
+//查看标签信息
+git show v1.0
+
+//创建带有说明的标签，用-a指定标签名，-m指定说明文字：
+git tag -a v0.1 -m "日志"  commit_id
+
+//删除标签
+git tag -d v0.1
+
+//向远程服务器推送一个本地标签
+git push origin tag-name
+
+//向远程服务器推送所有的标签
+git push origin --tags
+
+//删除远程服务器的标签
+git push origin :refs/tags/tag-name
+
+
+
+
+
+同时关联码云和githup两个远程仓库
+1.删除已有的githup远程库
+git remote rm origin
+
+2.分别关联两个库
+git remote add github git@github.com/gyjlwn/repository.git
+git remote add gitee  git@gitee.com/gyjlwn/repository.git
+
+3.查看远程库
+git remote -v
+gitee   git@gitee.com:gyjlwn/repository.git (fetch)
+gitee   git@gitee.com:gyjlwn/repository.git (push)
+github  git@github.com:gyjlwn/repository.git (fetch)
+github  git@github.com:gyjlwn/repository.git (push)
+
+4.分别向远程库推送代码
+git push github master
+git push gitee master
+
+
+自定义git
+
+git config --global user.name "Your Name"
+git config --global user.email "email@example.com"
+git config --global color.ui true
+
+
+设置过滤文件
+1.新建 .gitignore文件
+2.添加要过滤的文件
+3.强制添加过滤的文件到git
+git add -f 文件名
+4.检查.gitignore文件的错误
+git check-ignore -v app.class
+
+
+
+
+
+
